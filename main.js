@@ -113,6 +113,13 @@ window.onload = function() {
 
 	    if (player.alive)
 	    {
+	    	if(player.x > 760) {
+	    		player.x = 760;
+			}
+			else if(player.x < 25) {
+	    		player.x = 25;
+			}
+
 			 //  Increase the score
 			 score += 1;
 			 scoreText.text = scoreString + score;
