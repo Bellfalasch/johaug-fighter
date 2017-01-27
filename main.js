@@ -110,6 +110,9 @@ window.onload = function() {
 
 	    //  Scroll the background
 	    starfield.tilePosition.y += 2;
+        //  Increase the score
+        score += 1;
+        scoreText.text = scoreString + score;
 
 	    if (player.alive)
 	    {
