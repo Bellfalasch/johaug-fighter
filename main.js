@@ -200,8 +200,6 @@ window.onload = function() {
 	    //resets the life count
 	    lives.callAll('revive');
 	    //  And brings the aliens back from the dead :)
-	    aliens.removeAll();
-	    createAliens();
 
 		 gameOver.visible = false;
 
