@@ -14,6 +14,7 @@ window.onload = function() {
 		// Projectiles related assets
 		game.load.image('bullet', 'assets/bullet.png');
 		game.load.image('enemyBullet', 'assets/enemy-bullet.png');
+        game.load.image('gameOver', 'assets/game-over.jpg');
 		game.load.spritesheet('kaboom', 'assets/explode.png', 128, 128);
 
 		// Background related assets
@@ -22,7 +23,6 @@ window.onload = function() {
 	}
 
 	var player;
-	var aliens;
 	var cursors;
 	var fireButton;
 	var explosions;
@@ -31,10 +31,9 @@ window.onload = function() {
 	var scoreString = '';
 	var scoreText;
 	var lives;
-	var enemyBullet;
-	var firingTimer = 0;
+	var barrier;
+	var barrierTimer = 0;
 	var stateText;
-	var livingEnemies = [];
 	var barriers;
 
 	function create() {
@@ -45,26 +44,20 @@ window.onload = function() {
 	    starfield = game.add.tileSprite(0, 0, 800, 600, 'starfield');
 
 	    // The enemy's bullets
-	    enemyBullets = game.add.group();
-	    enemyBullets.enableBody = true;
-	    enemyBullets.physicsBodyType = Phaser.Physics.ARCADE;
-	    enemyBullets.createMultiple(30, 'enemyBullet');
-	    enemyBullets.setAll('anchor.x', 0.5);
-	    enemyBullets.setAll('anchor.y', 1);
-	    enemyBullets.setAll('outOfBoundsKill', true);
-	    enemyBullets.setAll('checkWorldBounds', true);
+	    barriers = game.add.group();
+	    barriers.enableBody = true;
+	    barriers.physicsBodyType = Phaser.Physics.ARCADE;
+        barriers.createMultiple(3, 'ship');
+        barriers.setAll('anchor.x', 0.5);
+        barriers.setAll('anchor.y', 1);
+	    barriers.setAll('outOfBoundsKill', true);
+	    barriers.setAll('checkWorldBounds', true);
+
 
 	    //  The hero!
 	    player = game.add.sprite(400, 500, 'ship');
 	    player.anchor.setTo(0.5, 0.5);
 	    game.physics.enable(player, Phaser.Physics.ARCADE);
-
-	    //  The baddies!
-	    aliens = game.add.group();
-	    aliens.enableBody = true;
-	    aliens.physicsBodyType = Phaser.Physics.ARCADE;
-
-	    createAliens();
 
 	    //  The score
 	    scoreString = 'Score : ';
@@ -98,41 +91,11 @@ window.onload = function() {
 
 	}
 
-	function createAliens () {
-
-	    for (var y = 0; y < 4; y++)
-	    {
-	        for (var x = 0; x < 10; x++)
-	        {
-	            var alien = aliens.create(x * 48, y * 50, 'invader');
-	            alien.anchor.setTo(0.5, 0.5);
-	            alien.animations.add('fly', [ 0, 1, 2, 3 ], 20, true);
-	            alien.play('fly');
-	            alien.body.moves = false;
-	        }
-	    }
-
-	    aliens.x = 100;
-	    aliens.y = 50;
-
-	    //  All this does is basically start the invaders moving. Notice we're moving the Group they belong to, rather than the invaders directly.
-	    var tween = game.add.tween(aliens).to( { x: 200 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true);
-
-	    //  When the tween loops it calls descend
-	    tween.onLoop.add(descend, this);
-	}
-
 	function setupInvader (invader) {
 
 	    invader.anchor.x = 0.5;
 	    invader.anchor.y = 0.5;
 	    invader.animations.add('kaboom');
-
-	}
-
-	function descend() {
-
-	    aliens.y += 10;
 
 	}
 
@@ -155,13 +118,13 @@ window.onload = function() {
 	            player.body.velocity.x = 200;
 	        }
 
-	        if (game.time.now > firingTimer)
+	        if (game.time.now > barrierTimer)
 	        {
-	            enemyFires();
+	            barrierAppears();
 	        }
 
 	        //  Run collision
-	        game.physics.arcade.overlap(enemyBullets, player, barrierHitsPlayer, null, this);
+	        game.physics.arcade.overlap(barriers, player, barrierHitsPlayer, null, this);
 	    }
 
 	}
@@ -195,10 +158,11 @@ window.onload = function() {
 	    if (lives.countLiving() < 1)
 	    {
 	        player.kill();
-	        enemyBullets.callAll('kill');
+	        barriers.callAll('kill');
 
 	        stateText.text=" GAME OVER \n Click to restart";
 	        stateText.visible = true;
+            game.add.sprite(0, 0, 'gameOver');
 
 	        //the "click to restart" handler
 	        game.input.onTap.addOnce(restart,this);
@@ -206,32 +170,17 @@ window.onload = function() {
 
 	}
 
-	function enemyFires () {
+	function barrierAppears () {
 
-	    //  Grab the first bullet we can from the pool
-	    enemyBullet = enemyBullets.getFirstExists(false);
+	    //  Grab the random barrier
+        var random = game.rnd.integerInRange(0,barriers.length-1);
+	    barrier = barriers[random];
 
-	    livingEnemies.length=0;
-
-	    aliens.forEachAlive(function(alien){
-
-	        // put every living enemy in an array
-	        livingEnemies.push(alien);
-	    });
-
-
-	    if (enemyBullet && livingEnemies.length > 0)
+	    if (barrier)
 	    {
+	        barrier.reset(300, 0);
 
-	        var random=game.rnd.integerInRange(0,livingEnemies.length-1);
-
-	        // randomly select one of them
-	        var shooter=livingEnemies[random];
-	        // And fire the bullet from this enemy
-	        enemyBullet.reset(shooter.body.x, shooter.body.y);
-
-	        game.physics.arcade.moveToObject(enemyBullet,player,120);
-	        firingTimer = game.time.now + 2000;
+	        barrierTimer = game.time.now + 2000;
 	    }
 
 	}
