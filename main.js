@@ -13,6 +13,8 @@ window.onload = function() {
 
 		// Projectiles related assets
 		game.load.image('bullet', 'assets/bullet.png');
+		game.load.image('barrier1', 'assets/tree1.png');
+		game.load.image('barrier2', 'assets/tree2.png');
 		game.load.image('enemyBullet', 'assets/enemy-bullet.png');
         game.load.image('gameOver', 'assets/game-over.jpg');
 		game.load.spritesheet('kaboom', 'assets/explode.png', 128, 128);
@@ -47,9 +49,10 @@ window.onload = function() {
 	    barriers = game.add.group();
 	    barriers.enableBody = true;
 	    barriers.physicsBodyType = Phaser.Physics.ARCADE;
-        barriers.createMultiple(3, 'ship');
-        barriers.setAll('anchor.x', 0.5);
-        barriers.setAll('anchor.y', 1);
+        barriers.createMultiple(3, 'barrier1');
+        barriers.createMultiple(3, 'barrier2');
+        // barriers.setAll('anchor.x', 0.5);
+        // barriers.setAll('anchor.y', 1);
 	    barriers.setAll('outOfBoundsKill', true);
 	    barriers.setAll('checkWorldBounds', true);
 
@@ -172,21 +175,15 @@ window.onload = function() {
 
 	function barrierAppears () {
 
-	    barrier = barriers.getRandom();
+	    barrier = barriers.getFirstExists(false);
 
 	    if (barrier)
 	    {
-	        barrier.reset(300, 0);
+	        barrier.reset(game.rnd.integerInRange(0,800), 0);
+            game.physics.arcade.moveToXY(barrier,300,600,180);
 
-	        barrierTimer = game.time.now + 2000;
+	        barrierTimer = game.time.now + game.rnd.integerInRange(1000,4000);
 	    }
-
-	}
-
-	function resetBullet (bullet) {
-
-	    //  Called if the bullet goes out of the screen
-	    bullet.kill();
 
 	}
 
