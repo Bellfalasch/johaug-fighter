@@ -70,6 +70,10 @@ window.onload = function() {
 	    lives = game.add.group();
 	    game.add.text(game.world.width - 100, 10, 'Lives : ', { font: '34px Arial', fill: '#fff' });
 
+		 // Add the game over screen, but don't display it just yet
+		 gameOver = game.add.sprite(0, 0, 'gameOver');
+		 gameOver.visible = false;
+
 	    //  Text
 	    stateText = game.add.text(game.world.centerX,game.world.centerY,' ', { font: '84px Arial', fill: '#fff' });
 	    stateText.anchor.setTo(0.5, 0.5);
@@ -163,9 +167,10 @@ window.onload = function() {
 	        player.kill();
 	        barriers.callAll('kill');
 
+			  gameOver.visible = true;
+
 	        stateText.text=" GAME OVER \n Click to restart";
 	        stateText.visible = true;
-            game.add.sprite(0, 0, 'gameOver');
 
 	        //the "click to restart" handler
 	        game.input.onTap.addOnce(restart,this);
@@ -197,6 +202,8 @@ window.onload = function() {
 	    //  And brings the aliens back from the dead :)
 	    aliens.removeAll();
 	    createAliens();
+
+		 gameOver.visible = false;
 
 	    //revives the player
 	    player.revive();
