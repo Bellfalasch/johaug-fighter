@@ -109,7 +109,7 @@ window.onload = function() {
 	function update() {
 
 	    //  Scroll the background
-	    starfield.tilePosition.y += 2;
+	    starfield.tilePosition.y += 3;
         //  Increase the score
         score += 1;
         scoreText.text = scoreString + score;
@@ -121,11 +121,11 @@ window.onload = function() {
 
 	        if (cursors.left.isDown)
 	        {
-	            player.body.velocity.x = -200;
+	            player.body.velocity.x = -400;
 	        }
 	        else if (cursors.right.isDown)
 	        {
-	            player.body.velocity.x = 200;
+	            player.body.velocity.x = 400;
 	        }
 
 	        if (game.time.now > barrierTimer)
