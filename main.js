@@ -10,8 +10,9 @@ window.onload = function() {
 	    game.load.spritesheet('invader', 'assets/invader32x32x4.png', 32, 32);
 	    game.load.image('ship', 'assets/player.png');
 	    game.load.spritesheet('kaboom', 'assets/explode.png', 128, 128);
-	    game.load.image('starfield', 'assets/starfield.png');
-	    //game.load.image('background', 'assets/games/starstruck/background2.png');
+
+		 // Background related assets
+	    game.load.image('starfield', 'assets/snow1.jpg');
 
 	}
 
