@@ -21,6 +21,7 @@ window.onload = function() {
 
 		// Background related assets
 		game.load.image('starfield', 'assets/snow1.jpg');
+		game.load.image('splash', 'assets/start-screen.jpg');
 
 	}
 
@@ -44,6 +45,11 @@ window.onload = function() {
 
 	    //  The scrolling starfield background
 	    starfield = game.add.tileSprite(0, 0, 800, 600, 'starfield');
+
+	    splash = game.add.tileSprite(0, 0, 800, 600, 'splash');
+		 setTimeout( function() {
+			 splash.visible = false;
+		 }, 1500);
 
 	    // The enemy's bullets
 	    barriers = game.add.group();
