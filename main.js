@@ -5,16 +5,19 @@ window.onload = function() {
 
 	function preload() {
 
-	    game.load.image('bullet', 'assets/bullet.png');
-	    game.load.image('enemyBullet', 'assets/enemy-bullet.png');
-	    game.load.spritesheet('invader', 'assets/invader32x32x4.png', 32, 32);
-	    game.load.spritesheet('kaboom', 'assets/explode.png', 128, 128);
+		// Player related assets
+		game.load.image('ship', 'assets/hero1.png');
 
-		 // Player related assets
-		 game.load.image('ship', 'assets/hero1.png');
+		// Enemies/obstacle related assets
+		game.load.spritesheet('invader', 'assets/invader32x32x4.png', 32, 32);
 
-		 // Background related assets
-	    game.load.image('starfield', 'assets/snow1.jpg');
+		// Projectiles related assets
+		game.load.image('bullet', 'assets/bullet.png');
+		game.load.image('enemyBullet', 'assets/enemy-bullet.png');
+		game.load.spritesheet('kaboom', 'assets/explode.png', 128, 128);
+
+		// Background related assets
+		game.load.image('starfield', 'assets/snow1.jpg');
 
 	}
 
