@@ -172,9 +172,7 @@ window.onload = function() {
 
 	function barrierAppears () {
 
-	    //  Grab the random barrier
-        var random = game.rnd.integerInRange(0,barriers.length-1);
-	    barrier = barriers[random];
+	    barrier = barriers.getRandom();
 
 	    if (barrier)
 	    {
