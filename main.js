@@ -200,11 +200,12 @@ window.onload = function() {
 
 	    //  A new level starts
 
+		score = 0;
 	    //resets the life count
 	    lives.callAll('revive');
 	    //  And brings the aliens back from the dead :)
 
-		 gameOver.visible = false;
+		gameOver.visible = false;
 
 	    //revives the player
 	    player.revive();
