@@ -188,10 +188,10 @@ window.onload = function() {
 	    if (barrier)
 	    {
 	        var randomX = game.rnd.integerInRange(0,800);
-	        barrier.reset(randomX, 0);
+	        barrier.reset(randomX, -80);
             game.physics.arcade.moveToXY(barrier,randomX,600,180);
 
-	        barrierTimer = game.time.now + game.rnd.integerInRange(500,2000);
+	        barrierTimer = game.time.now + game.rnd.integerInRange(50,500);
 	    }
 
 	}
