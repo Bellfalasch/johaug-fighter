@@ -23,8 +23,6 @@ window.onload = function() {
 
 	var player;
 	var aliens;
-	var bullets;
-	var bulletTime = 0;
 	var cursors;
 	var fireButton;
 	var explosions;
@@ -37,6 +35,7 @@ window.onload = function() {
 	var firingTimer = 0;
 	var stateText;
 	var livingEnemies = [];
+	var barriers;
 
 	function create() {
 
@@ -44,16 +43,6 @@ window.onload = function() {
 
 	    //  The scrolling starfield background
 	    starfield = game.add.tileSprite(0, 0, 800, 600, 'starfield');
-
-	    //  Our bullet group
-	    bullets = game.add.group();
-	    bullets.enableBody = true;
-	    bullets.physicsBodyType = Phaser.Physics.ARCADE;
-	    bullets.createMultiple(30, 'bullet');
-	    bullets.setAll('anchor.x', 0.5);
-	    bullets.setAll('anchor.y', 1);
-	    bullets.setAll('outOfBoundsKill', true);
-	    bullets.setAll('checkWorldBounds', true);
 
 	    // The enemy's bullets
 	    enemyBullets = game.add.group();
@@ -166,20 +155,13 @@ window.onload = function() {
 	            player.body.velocity.x = 200;
 	        }
 
-	        //  Firing?
-	        if (fireButton.isDown)
-	        {
-	            fireBullet();
-	        }
-
 	        if (game.time.now > firingTimer)
 	        {
 	            enemyFires();
 	        }
 
 	        //  Run collision
-	        game.physics.arcade.overlap(bullets, aliens, collisionHandler, null, this);
-	        game.physics.arcade.overlap(enemyBullets, player, enemyHitsPlayer, null, this);
+	        game.physics.arcade.overlap(enemyBullets, player, barrierHitsPlayer, null, this);
 	    }
 
 	}
@@ -193,37 +175,7 @@ window.onload = function() {
 
 	}
 
-	function collisionHandler (bullet, alien) {
-
-	    //  When a bullet hits an alien we kill them both
-	    bullet.kill();
-	    alien.kill();
-
-	    //  Increase the score
-	    score += 20;
-	    scoreText.text = scoreString + score;
-
-	    //  And create an explosion :)
-	    var explosion = explosions.getFirstExists(false);
-	    explosion.reset(alien.body.x, alien.body.y);
-	    explosion.play('kaboom', 30, false, true);
-
-	    if (aliens.countLiving() == 0)
-	    {
-	        score += 1000;
-	        scoreText.text = scoreString + score;
-
-	        enemyBullets.callAll('kill',this);
-	        stateText.text = " You Won, \n Click to restart";
-	        stateText.visible = true;
-
-	        //the "click to restart" handler
-	        game.input.onTap.addOnce(restart,this);
-	    }
-
-	}
-
-	function enemyHitsPlayer (player,bullet) {
+	function barrierHitsPlayer (player,bullet) {
 
 	    bullet.kill();
 
@@ -280,25 +232,6 @@ window.onload = function() {
 
 	        game.physics.arcade.moveToObject(enemyBullet,player,120);
 	        firingTimer = game.time.now + 2000;
-	    }
-
-	}
-
-	function fireBullet () {
-
-	    //  To avoid them being allowed to fire too fast we set a time limit
-	    if (game.time.now > bulletTime)
-	    {
-	        //  Grab the first bullet we can from the pool
-	        bullet = bullets.getFirstExists(false);
-
-	        if (bullet)
-	        {
-	            //  And fire it
-	            bullet.reset(player.x, player.y + 8);
-	            bullet.body.velocity.y = -400;
-	            bulletTime = game.time.now + 200;
-	        }
 	    }
 
 	}
