@@ -49,8 +49,8 @@ window.onload = function() {
 	    barriers = game.add.group();
 	    barriers.enableBody = true;
 	    barriers.physicsBodyType = Phaser.Physics.ARCADE;
-        barriers.createMultiple(3, 'barrier1');
-        barriers.createMultiple(3, 'barrier2');
+        barriers.createMultiple(10, 'barrier1');
+        barriers.createMultiple(10, 'barrier2');
         // barriers.setAll('anchor.x', 0.5);
         // barriers.setAll('anchor.y', 1);
 	    barriers.setAll('outOfBoundsKill', true);
@@ -179,10 +179,11 @@ window.onload = function() {
 
 	    if (barrier)
 	    {
-	        barrier.reset(game.rnd.integerInRange(0,800), 0);
-            game.physics.arcade.moveToXY(barrier,300,600,180);
+	        var randomX = game.rnd.integerInRange(0,800);
+	        barrier.reset(randomX, 0);
+            game.physics.arcade.moveToXY(barrier,randomX,600,180);
 
-	        barrierTimer = game.time.now + game.rnd.integerInRange(1000,4000);
+	        barrierTimer = game.time.now + game.rnd.integerInRange(500,2000);
 	    }
 
 	}
