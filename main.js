@@ -9,14 +9,14 @@ window.onload = function() {
 		game.load.image('ship', 'assets/hero1.png');
 
 		// Enemies/obstacle related assets
-		game.load.spritesheet('invader', 'assets/invader32x32x4.png', 32, 32);
+		// NONE YET
 
 		// Projectiles related assets
 		game.load.image('bullet', 'assets/bullet.png');
 		game.load.image('barrier1', 'assets/tree1.png');
 		game.load.image('barrier2', 'assets/tree2.png');
 		game.load.image('enemyBullet', 'assets/enemy-bullet.png');
-        game.load.image('gameOver', 'assets/game-over.jpg');
+      game.load.image('gameOver', 'assets/game-over.jpg');
 		game.load.spritesheet('kaboom', 'assets/explode.png', 128, 128);
 
 		// Background related assets
@@ -36,8 +36,11 @@ window.onload = function() {
 	var lives;
 	var barrier;
 	var barrierTimer = 0;
+	var barrier2;
+	var barrier2Timer = 0;
 	var stateText;
 	var barriers;
+	var barriers2;
 
 	function create() {
 
@@ -55,8 +58,7 @@ window.onload = function() {
 	    barriers = game.add.group();
 	    barriers.enableBody = true;
 	    barriers.physicsBodyType = Phaser.Physics.ARCADE;
-        barriers.createMultiple(20, 'barrier1');
-        barriers.createMultiple(20, 'barrier2');
+        barriers.createMultiple(20, ['barrier1', 'barrier2']);
         // barriers.setAll('anchor.x', 0.5);
         // barriers.setAll('anchor.y', 1);
 	    barriers.setAll('outOfBoundsKill', true);
@@ -206,6 +208,17 @@ window.onload = function() {
             game.physics.arcade.moveToXY(barrier,randomX,600,180);
 
 	        barrierTimer = game.time.now + game.rnd.integerInRange(50,250);
+	    }
+
+	    barrier2 = barriers.getFirstExists(false);
+
+	    if (barrier2)
+	    {
+	        var randomX2 = game.rnd.integerInRange(0,800);
+	        barrier2.reset(randomX2, -80);
+           game.physics.arcade.moveToXY(barrier2,randomX2,600,180);
+
+	        barrier2Timer = game.time.now + game.rnd.integerInRange(50,250);
 	    }
 
 	}
